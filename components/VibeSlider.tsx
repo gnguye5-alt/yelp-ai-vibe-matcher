@@ -21,27 +21,27 @@ export default function VibeSlider({
     <div className="flex gap-3 items-center w-full">
       {/* Label with icon */}
       <div className="flex gap-2 items-center min-w-[128px]">
-        <div className="w-4 h-4 text-[#364153]">{icon}</div>
-        <span className="text-sm text-[#364153] font-normal tracking-tight">
+        <div className="w-6 h-6 text-[#6B6D6F] flex items-center justify-center">{icon}</div>
+        <span className="font-['Open_Sans'] font-semibold text-[18px] leading-7 text-[#2D2E2F]">
           {label}
         </span>
       </div>
 
       {/* Slider container */}
       <div className="flex-1 flex gap-2 items-center">
-        <span className="text-xs text-[#6a7282] w-16">{minLabel}</span>
+        <span className="font-['Open_Sans'] font-normal text-base leading-6 text-[#6B6D6F] w-16 text-left">{minLabel}</span>
         <input
           type="range"
           min="0"
           max="100"
           value={value}
           onChange={(e) => onChange(Number(e.target.value))}
-          className="flex-1 h-1.5 bg-gray-200 rounded-full appearance-none cursor-pointer range-slider"
+          className="flex-1 h-1.5 bg-[#E3E3E3] rounded-full appearance-none cursor-pointer range-slider"
           style={{
-            background: `linear-gradient(to right, #9810fa 0%, #9810fa ${value}%, #e5e7eb ${value}%, #e5e7eb 100%)`
+            background: `linear-gradient(to right, #0396BC 0%, #0396BC ${value}%, #E3E3E3 ${value}%, #E3E3E3 100%)`
           }}
         />
-        <span className="text-xs text-[#6a7282] w-16 text-right">{maxLabel}</span>
+        <span className="font-['Open_Sans'] font-normal text-base leading-6 text-[#6B6D6F] w-[120px] text-left whitespace-nowrap ml-4">{maxLabel}</span>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@
 export interface YelpBusiness {
   id: string;
   name: string;
-  image_url: string;
+  image_url?: string;
   url: string;
   review_count: number;
   categories: { alias: string; title: string }[];
@@ -18,7 +18,7 @@ export interface YelpBusiness {
     formatted_address?: string;
   };
   phone: string;
-  display_phone: string;
+  display_phone?: string;
   distance?: number;
   attributes?: {
     NoiseLevel?: string | null;
@@ -42,6 +42,9 @@ export interface YelpBusiness {
   contextual_info?: {
     summary?: string | null;
     review_snippet?: string;
+    photos?: {
+      original_url: string;
+    }[];
   };
 }
 

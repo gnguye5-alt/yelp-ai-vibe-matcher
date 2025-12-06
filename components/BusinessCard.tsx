@@ -1,6 +1,5 @@
 import React from 'react';
 import Image from 'next/image';
-import VibeIndicator from './VibeIndicator';
 
 interface BusinessCardProps {
   business: {
@@ -36,29 +35,29 @@ interface BusinessCardProps {
   quote?: string;
 }
 
-// Helper to get match color based on percentage
+// Helper to get match color based on percentage - using official Yelp colors
 function getMatchColor(percentage: number): string {
-  if (percentage >= 80) return 'bg-green-500';
-  if (percentage >= 60) return 'bg-lime-500';
-  if (percentage >= 40) return 'bg-yellow-500';
-  if (percentage >= 20) return 'bg-orange-500';
-  return 'bg-red-500';
+  if (percentage >= 80) return 'bg-[#029E6A]'; // Yelp Green Regular
+  if (percentage >= 60) return 'bg-[#419D28]'; // Yelp Lime Regular
+  if (percentage >= 40) return 'bg-[#E4622E]'; // Yelp Orange Regular
+  if (percentage >= 20) return 'bg-[#C04214]'; // Yelp Orange Dark
+  return 'bg-[#D71616]'; // Yelp Red Dark
 }
 
 function getMatchTextColor(percentage: number): string {
-  if (percentage >= 80) return 'text-green-700';
-  if (percentage >= 60) return 'text-lime-700';
-  if (percentage >= 40) return 'text-yellow-700';
-  if (percentage >= 20) return 'text-orange-700';
-  return 'text-red-700';
+  if (percentage >= 80) return 'text-[#007C52]'; // Green Dark
+  if (percentage >= 60) return 'text-[#327C1E]'; // Lime Dark
+  if (percentage >= 40) return 'text-[#C04214]'; // Orange Dark
+  if (percentage >= 20) return 'text-[#C04214]'; // Orange Dark
+  return 'text-[#D71616]'; // Red Dark
 }
 
 function getMatchBgColor(percentage: number): string {
-  if (percentage >= 80) return 'bg-green-50 border-green-200';
-  if (percentage >= 60) return 'bg-lime-50 border-lime-200';
-  if (percentage >= 40) return 'bg-yellow-50 border-yellow-200';
-  if (percentage >= 20) return 'bg-orange-50 border-orange-200';
-  return 'bg-red-50 border-red-200';
+  if (percentage >= 80) return 'bg-[#DEF6E7] border-[#029E6A]/30'; // Green Light
+  if (percentage >= 60) return 'bg-[#E1F7DC] border-[#419D28]/30'; // Lime Light
+  if (percentage >= 40) return 'bg-[#FFEDDD] border-[#E4622E]/30'; // Orange Light
+  if (percentage >= 20) return 'bg-[#FFEDDD] border-[#C04214]/30'; // Orange Light
+  return 'bg-[#FFECEC] border-[#D71616]/30'; // Red Light
 }
 
 export default function BusinessCard({ business, vibeScores, vibeMatch, quote }: BusinessCardProps) {
@@ -66,20 +65,22 @@ export default function BusinessCard({ business, vibeScores, vibeMatch, quote }:
   const fullStars = Math.floor(business.rating);
   const hasHalfStar = business.rating % 1 >= 0.5;
 
-  // Convert 0-100 scores to 0-4 for VibeIndicator display
-  const normalizeScore = (score: number) => Math.round((score / 100) * 4);
-
   return (
-    <div className="bg-white border border-[rgba(0,0,0,0.25)] rounded-2xl p-2 shadow-sm flex gap-4 items-start relative">
+    <a
+      href={business.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="block bg-white rounded-xl p-5 shadow-[0_1px_3px_rgba(0,0,0,0.12),0_1px_2px_rgba(0,0,0,0.08)] hover:shadow-[0_4px_6px_rgba(0,0,0,0.12),0_2px_4px_rgba(0,0,0,0.08)] transition-shadow flex gap-5 items-start relative"
+    >
       {/* Match Percentage Badge */}
       {vibeMatch && (
-        <div className={`absolute -top-2 -right-2 ${getMatchColor(vibeMatch.overall)} text-white text-xs font-bold px-2 py-1 rounded-full shadow-md`}>
+        <div className={`absolute -top-2 -right-2 ${getMatchColor(vibeMatch.overall)} text-white text-xs font-bold px-2.5 py-1 rounded-full shadow-md`}>
           {vibeMatch.overall}% Vibe Match
         </div>
       )}
 
       {/* Image */}
-      <div className="w-[123px] h-[139px] rounded-lg overflow-hidden flex-shrink-0 relative bg-gray-100">
+      <div className="w-[200px] h-[200px] rounded-lg overflow-hidden flex-shrink-0 relative bg-[#F0F0F0]">
         {business.image_url && (
           <Image
             src={business.image_url}
@@ -91,47 +92,64 @@ export default function BusinessCard({ business, vibeScores, vibeMatch, quote }:
       </div>
 
       {/* Content */}
-      <div className="flex-1 flex flex-col gap-1 min-w-0">
+      <div className="flex-1 flex flex-col gap-2 min-w-0 py-1">
         {/* Business Name */}
-        <h3 className="font-bold text-base text-[#101828] tracking-tight leading-tight">
+        <h3 className="font-['Poppins'] font-bold text-[20px] leading-7 text-[#2D2E2F]">
           {business.name}
         </h3>
 
-        {/* Rating and Reviews */}
+        {/* Rating and Reviews - Yelp style star ribbon */}
         <div className="flex gap-2 items-center">
-          {/* Stars */}
-          <div className="flex gap-1">
-            {[...Array(5)].map((_, i) => (
-              <span
-                key={i}
-                className={`text-base ${
-                  i < fullStars
-                    ? 'text-[#ff6b00]'
-                    : i === fullStars && hasHalfStar
-                    ? 'text-[#ff6b00]'
-                    : 'text-gray-300'
-                }`}
-              >
-                ★
-              </span>
-            ))}
+          {/* Stars - Yelp review ribbon style */}
+          <div className="flex gap-0.5">
+            {[...Array(5)].map((_, i) => {
+              const isFullStar = i < fullStars;
+              const isHalfStar = i === fullStars && hasHalfStar;
+              const isEmpty = !isFullStar && !isHalfStar;
+
+              return (
+                <div
+                  key={i}
+                  className="w-5 h-5 rounded-sm flex items-center justify-center overflow-hidden relative"
+                  style={{ backgroundColor: isEmpty ? '#C8C9CA' : undefined }}
+                >
+                  {isHalfStar ? (
+                    // Half star: left half red, right half gray
+                    <>
+                      <div className="absolute inset-0 w-1/2 bg-[#FA4848]" />
+                      <div className="absolute inset-0 left-1/2 w-1/2 bg-[#C8C9CA]" />
+                      <svg className="w-4 h-4 text-white relative z-10" viewBox="0 0 14 14" fill="currentColor">
+                        <path d="M7 1l1.753 3.553 3.922.57-2.838 2.767.67 3.91L7 10.188 3.493 11.8l.67-3.91L1.325 5.123l3.922-.57L7 1z" />
+                      </svg>
+                    </>
+                  ) : (
+                    // Full or empty star
+                    <div className={`w-full h-full flex items-center justify-center ${isFullStar ? 'bg-[#FA4848]' : 'bg-[#C8C9CA]'}`}>
+                      <svg className="w-4 h-4 text-white" viewBox="0 0 14 14" fill="currentColor">
+                        <path d="M7 1l1.753 3.553 3.922.57-2.838 2.767.67 3.91L7 10.188 3.493 11.8l.67-3.91L1.325 5.123l3.922-.57L7 1z" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
           {/* Rating number */}
-          <span className="text-sm font-medium text-[#101828]">
+          <span className="font-['Open_Sans'] font-semibold text-base leading-6 text-[#2D2E2F]">
             {business.rating}
           </span>
           {/* Review count */}
-          <span className="text-sm text-[#6a7282]">
+          <span className="font-['Open_Sans'] font-normal text-base leading-6 text-[#6B6D6F]">
             ({business.review_count} reviews)
           </span>
         </div>
 
-        {/* Categories */}
-        <div className="flex gap-4 items-center">
-          {business.categories.slice(0, 2).map((cat) => (
+        {/* Categories - Yelp style pills */}
+        <div className="flex gap-2 items-center flex-wrap">
+          {business.categories.slice(0, 3).map((cat) => (
             <span
               key={cat.alias}
-              className="bg-neutral-200 px-1 py-0.5 rounded text-sm font-semibold text-[#364153]"
+              className="bg-[#F5F5F5] text-[#2D2E2F] px-2 py-1 rounded font-['Poppins'] font-medium text-[14px] leading-5"
             >
               {cat.title}
             </span>
@@ -139,33 +157,39 @@ export default function BusinessCard({ business, vibeScores, vibeMatch, quote }:
         </div>
 
         {/* Location and Details */}
-        <div className="flex gap-2 items-start text-sm">
+        <div className="flex gap-2 items-center text-base">
           <svg
-            className="w-5 h-5 text-[#364153] flex-shrink-0 mt-0.5"
-            fill="currentColor"
-            viewBox="0 0 20 20"
+            className="w-4 h-4 text-[#898A8B] flex-shrink-0"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            viewBox="0 0 24 24"
           >
             <path
-              fillRule="evenodd"
-              d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z"
-              clipRule="evenodd"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+            />
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
             />
           </svg>
-          <p className="text-[#364153] leading-6">
-            <span className="font-semibold">{business.location.city}</span>
+          <p className="font-['Open_Sans'] text-[14px] leading-5 text-[#2D2E2F]">
+            <span>{business.location.address1 || business.location.city}</span>
             {business.price && (
-              <>
-                <span className="font-normal"> • {business.price} • </span>
-              </>
+              <span> • {business.price}</span>
             )}
-            <span className="text-[#00a63e]">Open</span>
-            <span className="font-normal"> until 2:00 AM</span>
+            <span> • </span>
+            <span className="text-[#029E6A] font-medium">Open</span>
+            <span> until 2:00 AM</span>
           </p>
         </div>
 
         {/* Quote */}
         {quote && (
-          <p className="text-sm text-[#4a5565] italic line-clamp-2 leading-5">
+          <p className="font-['Open_Sans'] text-xs leading-4 text-[#898A8B] italic line-clamp-2">
             &ldquo;{quote}&rdquo;
           </p>
         )}
@@ -173,26 +197,26 @@ export default function BusinessCard({ business, vibeScores, vibeMatch, quote }:
         {/* Vibe Match Breakdown */}
         {vibeMatch && (
           <div className={`flex items-center gap-3 mt-1 px-2 py-1.5 rounded-lg border ${getMatchBgColor(vibeMatch.overall)}`}>
-            <span className={`text-xs font-semibold ${getMatchTextColor(vibeMatch.overall)}`}>
+            <span className={`font-['Open_Sans'] font-bold text-xs leading-4 ${getMatchTextColor(vibeMatch.overall)}`}>
               Vibe Match:
             </span>
             <div className="flex gap-2 text-xs">
               <span className="flex items-center gap-1">
-                <span className="text-gray-500">Noise</span>
+                <span className="text-[#898A8B]">Noise</span>
                 <span className={`font-medium ${getMatchTextColor(vibeMatch.breakdown.noise)}`}>
                   {vibeMatch.breakdown.noise}%
                 </span>
               </span>
-              <span className="text-gray-300">|</span>
+              <span className="text-[#C8C9CA]">|</span>
               <span className="flex items-center gap-1">
-                <span className="text-gray-500">Cozy</span>
+                <span className="text-[#898A8B]">Cozy</span>
                 <span className={`font-medium ${getMatchTextColor(vibeMatch.breakdown.cozy)}`}>
                   {vibeMatch.breakdown.cozy}%
                 </span>
               </span>
-              <span className="text-gray-300">|</span>
+              <span className="text-[#C8C9CA]">|</span>
               <span className="flex items-center gap-1">
-                <span className="text-gray-500">Focus</span>
+                <span className="text-[#898A8B]">Focus</span>
                 <span className={`font-medium ${getMatchTextColor(vibeMatch.breakdown.focus)}`}>
                   {vibeMatch.breakdown.focus}%
                 </span>
@@ -200,43 +224,7 @@ export default function BusinessCard({ business, vibeScores, vibeMatch, quote }:
             </div>
           </div>
         )}
-
-        {/* Vibe Indicators */}
-        {vibeScores && (
-          <div className="flex gap-10 mt-1">
-            <VibeIndicator
-              label="Cozy"
-              icon={
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M8 2.667a.667.667 0 01.667.666v.334a.667.667 0 01-1.334 0v-.334A.667.667 0 018 2.667zM3.757 4.343a.667.667 0 01.943 0l.236.236a.667.667 0 11-.943.943l-.236-.236a.667.667 0 010-.943zM11.3 4.343a.667.667 0 01.943.943l-.236.236a.667.667 0 11-.943-.943l.236-.236zM8 6a2 2 0 100 4 2 2 0 000-4zM2 12a.667.667 0 01.667-.667h10.666a.667.667 0 110 1.333H2.667A.667.667 0 012 12z" />
-                </svg>
-              }
-              level={normalizeScore(vibeScores.cozy)}
-              color="green"
-            />
-            <VibeIndicator
-              label="Noise"
-              icon={
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M7 3a.667.667 0 01.667.667v8.666a.667.667 0 01-1.334 0V3.667A.667.667 0 017 3zM4.333 5.667a.667.667 0 01.667.666v3.334a.667.667 0 01-1.333 0V6.333a.667.667 0 01.666-.666zM9.667 5.667a.667.667 0 01.666.666v3.334a.667.667 0 01-1.333 0V6.333a.667.667 0 01.667-.666zM12.333 7.333a.667.667 0 01.667.667v.667a.667.667 0 01-1.333 0V8a.667.667 0 01.666-.667z" />
-                </svg>
-              }
-              level={normalizeScore(vibeScores.noise)}
-              color="gray"
-            />
-            <VibeIndicator
-              label="Focus"
-              icon={
-                <svg viewBox="0 0 16 16" fill="currentColor">
-                  <path d="M8 3.333a4.667 4.667 0 100 9.334 4.667 4.667 0 000-9.334zM8 6a2 2 0 110 4 2 2 0 010-4z" />
-                </svg>
-              }
-              level={normalizeScore(vibeScores.focus)}
-              color="green"
-            />
-          </div>
-        )}
       </div>
-    </div>
+    </a>
   );
 }

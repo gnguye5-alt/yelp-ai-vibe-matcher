@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import VibeSlider from '@/components/VibeSlider';
+import { FaRegCoffee, FaRegBriefcase, FaRegHeadphones } from '@/components/Icons';
 import BusinessCard from '@/components/BusinessCard';
 
 interface Business {
@@ -51,7 +52,7 @@ interface AIResponse {
 }
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('San Francisco');
+  const [searchQuery, setSearchQuery] = useState('');
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -140,31 +141,32 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-zinc-50 to-white">
-      <main className="container mx-auto px-6 py-5 max-w-7xl">
-        {/* Logo */}
-        <div className="mb-4">
-          <div className="w-[100px] h-[40px] relative">
-            <Image
-              src="/yelp-logo.svg"
-              alt="Yelp"
-              width={100}
-              height={40}
-              priority
-            />
-          </div>
+    <div className="min-h-screen bg-[#F7F7F7]">
+      {/* Logo only, no top bar */}
+      <div className="px-6 pt-6">
+        <div className="w-[80px] h-auto relative">
+          <Image
+            src="/yelp-logo.svg"
+            alt="Yelp"
+            width={80}
+            height={32}
+            priority
+            className="w-auto h-auto"
+          />
         </div>
+      </div>
 
+      <main className="container mx-auto px-6 pt-5 max-w-7xl">
         {/* Header Section */}
         <div className="bg-white border-b border-gray-200 shadow-sm rounded-lg mb-0 pb-1">
           <div className="px-6 py-5">
             {/* Title */}
             <div className="flex flex-col gap-1 mb-5">
-              <h1 className="text-base font-normal text-[#101828] tracking-tight text-center">
-                Find the perfect vibe.
+              <h1 className="font-['Poppins'] font-bold text-3xl leading-10 text-[#FA4848] text-center">
+                Let's find the perfect vibe for you
               </h1>
-              <p className="text-sm text-[#4a5565] tracking-tight text-center">
-                Adjust the vibes and explore matching places.
+              <p className="font-['Open_Sans'] font-normal text-l leading-6 text-[#6B6D6F] text-center">
+                Adjust the vibes and explore matching places
               </p>
             </div>
 
@@ -187,7 +189,7 @@ export default function Home() {
                   placeholder="Search city or place type..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-[#d1d5dc] rounded-lg text-sm placeholder:text-[rgba(10,10,10,0.5)] focus:outline-none focus:ring-2 focus:ring-[#9810fa] focus:border-transparent"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#F7F7F7] border border-[#E3E3E3] rounded-lg font-['Open_Sans'] text-base leading-6 placeholder:text-[#898A8B] focus:outline-none"
                 />
               </div>
             </div>
@@ -195,12 +197,8 @@ export default function Home() {
             {/* Vibe Sliders */}
             <div className="py-4 space-y-9 max-w-full">
               <VibeSlider
-                label="Noise Level"
-                icon={
-                  <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M7 3a.667.667 0 01.667.667v8.666a.667.667 0 01-1.334 0V3.667A.667.667 0 017 3zM4.333 5.667a.667.667 0 01.667.666v3.334a.667.667 0 01-1.333 0V6.333a.667.667 0 01.666-.666zM9.667 5.667a.667.667 0 01.666.666v3.334a.667.667 0 01-1.333 0V6.333a.667.667 0 01.667-.666zM12.333 7.333a.667.667 0 01.667.667v.667a.667.667 0 01-1.333 0V8a.667.667 0 01.666-.667z" />
-                  </svg>
-                }
+                label="Noise"
+                icon={<FaRegHeadphones />}
                 minLabel="Quiet"
                 maxLabel="Lively"
                 value={noiseLevel}
@@ -208,12 +206,8 @@ export default function Home() {
               />
 
               <VibeSlider
-                label="Cozy Factor"
-                icon={
-                  <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 2.667a.667.667 0 01.667.666v.334a.667.667 0 01-1.334 0v-.334A.667.667 0 018 2.667zM3.757 4.343a.667.667 0 01.943 0l.236.236a.667.667 0 11-.943.943l-.236-.236a.667.667 0 010-.943zM11.3 4.343a.667.667 0 01.943.943l-.236.236a.667.667 0 11-.943-.943l.236-.236zM8 6a2 2 0 100 4 2 2 0 000-4zM2 12a.667.667 0 01.667-.667h10.666a.667.667 0 110 1.333H2.667A.667.667 0 012 12z" />
-                  </svg>
-                }
+                label="Cozy"
+                icon={<FaRegCoffee />}
                 minLabel="Low"
                 maxLabel="High"
                 value={cozyFactor}
@@ -221,14 +215,10 @@ export default function Home() {
               />
 
               <VibeSlider
-                label="Focus / Work-Ready"
-                icon={
-                  <svg viewBox="0 0 16 16" fill="currentColor">
-                    <path d="M8 3.333a4.667 4.667 0 100 9.334 4.667 4.667 0 000-9.334zM8 6a2 2 0 110 4 2 2 0 010-4z" />
-                  </svg>
-                }
+                label="Focus"
+                icon={<FaRegBriefcase />}
                 minLabel="Casual"
-                maxLabel="Work-Friendly"
+                maxLabel="Work-friendly"
                 value={focusLevel}
                 onChange={setFocusLevel}
               />
@@ -238,8 +228,8 @@ export default function Home() {
             <div className="flex justify-center mt-2">
               <button
                 onClick={handleSearch}
-                disabled={loading}
-                className="bg-[#9810fa] hover:bg-[#8610d9] text-white font-normal text-sm px-5 py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed tracking-tight"
+                disabled={loading || !searchQuery.trim()}
+                className="bg-[#D71616] hover:bg-[#FA4848] text-white font-['Poppins'] font-bold text-base leading-6 px-6 py-2.5 rounded-md transition-colors disabled:bg-[#C8C9CA] disabled:text-white disabled:cursor-not-allowed"
               >
                 {loading ? 'Searching...' : 'Apply Filters'}
               </button>
@@ -249,7 +239,7 @@ export default function Home() {
 
         {/* Error Message */}
         {error && (
-          <div className="max-w-2xl mx-auto my-6 bg-red-50 border border-red-200 rounded-lg p-4 text-red-800">
+          <div className="max-w-2xl mx-auto my-6 bg-[#FFECEC] border border-[#FA4848]/30 rounded-lg p-4 text-[#D71616]">
             {error}
           </div>
         )}
@@ -266,14 +256,14 @@ export default function Home() {
               </p>
             </div>
 
-            {/* AI Response Summary */}
+            {/* AI Response Summary
             {aiResponse && (
               <div className="mb-6 p-4 bg-purple-50 border border-purple-200 rounded-lg">
                 <p className="text-sm text-[#4a5565] italic">
                   <span className="font-medium text-purple-700">AI Insight:</span> {aiResponse.text}
                 </p>
               </div>
-            )}
+            )} */}
 
             <div className="space-y-4">
               {businesses.map((business) => (
@@ -286,25 +276,6 @@ export default function Home() {
                 />
               ))}
             </div>
-
-            {/* Pagination */}
-            <div className="flex justify-center gap-2 mt-10">
-              <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-                Previous
-              </button>
-              <button className="px-3 py-2 bg-[#9810fa] text-white rounded-lg text-sm">
-                1
-              </button>
-              <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-                2
-              </button>
-              <button className="px-3 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-                3
-              </button>
-              <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm hover:bg-gray-50">
-                Next
-              </button>
-            </div>
           </div>
         )}
 
@@ -312,11 +283,12 @@ export default function Home() {
         {!loading && businesses.length === 0 && !error && (
           <div className="text-center py-16 mt-6">
             <p className="text-zinc-500 text-lg">
-              Adjust your vibe preferences and click &ldquo;Apply Filters&rdquo; to discover amazing local businesses!
+              Adjust your vibe preferences and click &ldquo;Apply Filters&rdquo; to discover amazing local businesses
             </p>
           </div>
         )}
-      </main>
+      <div className="pb-20" />
+    </main>
     </div>
   );
 }

@@ -62,8 +62,15 @@ export async function POST(request: NextRequest) {
       const vibeScores = calculateVibeScores(business);
       const vibeMatch = calculateVibeMatch(vibeScores, preferences);
 
+      // Extract image_url from contextual_info.photos if not directly available
+      let imageUrl = business.image_url;
+      if (!imageUrl && business.contextual_info?.photos?.length) {
+        imageUrl = business.contextual_info.photos[0].original_url;
+      }
+
       return {
         ...business,
+        image_url: imageUrl || '',
         vibeScores,
         vibeMatch,
       };
