@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import VibeSlider from '@/components/VibeSlider';
 import { FaRegCoffee, FaRegBriefcase, FaRegHeadphones } from '@/components/Icons';
@@ -22,6 +22,17 @@ interface Business {
     formatted_address?: string;
   };
   display_phone: string;
+  is_closed?: boolean;
+  hours?: {
+    hours_type: string;
+    open: {
+      day: number;
+      start: string;
+      end: string;
+      is_overnight: boolean;
+    }[];
+    is_open_now?: boolean;
+  }[];
   vibeScores?: {
     cozy: number;
     noise: number;
@@ -53,23 +64,51 @@ interface AIResponse {
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
+  const [locationInput, setLocationInput] = useState('');
   const [businesses, setBusinesses] = useState<Business[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [aiResponse, setAiResponse] = useState<AIResponse | null>(null);
   const [chatId, setChatId] = useState<string | null>(null);
 
+  // Geolocation state
+  const [userLocation, setUserLocation] = useState<{latitude: number; longitude: number} | null>(null);
+  const [locationLoading, setLocationLoading] = useState(true);
+  const [locationError, setLocationError] = useState<string | null>(null);
+
   // Vibe slider states
   const [noiseLevel, setNoiseLevel] = useState(50);
   const [cozyFactor, setCozyFactor] = useState(50);
   const [focusLevel, setFocusLevel] = useState(50);
 
-  const handleSearch = async () => {
-    if (!searchQuery) {
-      setError('Please enter a location or search term');
-      return;
+  // Request geolocation on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setUserLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          });
+          setLocationLoading(false);
+        },
+        (error) => {
+          console.warn('Geolocation error:', error.message);
+          setLocationError(error.message);
+          setLocationLoading(false);
+        },
+        {
+          timeout: 10000,
+          enableHighAccuracy: false,
+        }
+      );
+    } else {
+      setLocationError('Geolocation not supported');
+      setLocationLoading(false);
     }
+  }, []);
 
+  const handleSearch = async () => {
     setLoading(true);
     setError('');
 
@@ -81,8 +120,10 @@ export default function Home() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          searchTerm: searchQuery,
-          location: searchQuery,
+          query: searchQuery,
+          location: locationInput || undefined,
+          latitude: userLocation?.latitude,
+          longitude: userLocation?.longitude,
           noiseLevel,
           cozyFactor,
           focusLevel,
@@ -186,11 +227,35 @@ export default function Home() {
                 </svg>
                 <input
                   type="text"
-                  placeholder="Search city or place type..."
+                  placeholder="Describe your ideal vibe... (e.g., warm cozy cafe, quiet study spot)"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
                   className="w-full pl-10 pr-4 py-2.5 bg-[#F7F7F7] border border-[#E3E3E3] rounded-lg font-['Open_Sans'] text-base leading-6 placeholder:text-[#898A8B] focus:outline-none"
                 />
+              </div>
+            </div>
+
+            {/* Location Status & Manual Input */}
+            <div className="flex justify-center mb-2">
+              <div className="w-[576px]">
+                {locationLoading ? (
+                  <p className="text-xs text-[#898A8B] text-center">📍 Detecting your location...</p>
+                ) : userLocation ? (
+                  <p className="text-xs text-green-600 text-center">✓ Location detected</p>
+                ) : (
+                  <div className="space-y-1">
+                    <p className="text-xs text-amber-600 text-center">⚠ Location not available</p>
+                    <input
+                      type="text"
+                      placeholder="Enter location manually (e.g., San Francisco, CA)"
+                      value={locationInput}
+                      onChange={(e) => setLocationInput(e.target.value)}
+                      onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                      className="w-full px-3 py-1.5 bg-[#F7F7F7] border border-[#E3E3E3] rounded text-sm font-['Open_Sans'] placeholder:text-[#898A8B] focus:outline-none focus:border-[#FA4848]"
+                    />
+                  </div>
+                )}
               </div>
             </div>
 
@@ -228,7 +293,7 @@ export default function Home() {
             <div className="flex justify-center mt-2">
               <button
                 onClick={handleSearch}
-                disabled={loading || !searchQuery.trim()}
+                disabled={loading}
                 className="bg-[#D71616] hover:bg-[#FA4848] text-white font-['Poppins'] font-bold text-base leading-6 px-6 py-2.5 rounded-md transition-colors disabled:bg-[#C8C9CA] disabled:text-white disabled:cursor-not-allowed"
               >
                 {loading ? 'Searching...' : 'Apply Filters'}

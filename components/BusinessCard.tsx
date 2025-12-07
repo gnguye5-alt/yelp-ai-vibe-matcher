@@ -18,6 +18,17 @@ interface BusinessCardProps {
     price?: string;
     display_phone?: string;
     url: string;
+    is_closed?: boolean;
+    hours?: {
+      hours_type: string;
+      open: {
+        day: number;
+        start: string;
+        end: string;
+        is_overnight: boolean;
+      }[];
+      is_open_now?: boolean;
+    }[];
   };
   vibeScores?: {
     cozy: number; // 0-100
@@ -181,9 +192,6 @@ export default function BusinessCard({ business, vibeScores, vibeMatch, quote }:
             {business.price && (
               <span> • {business.price}</span>
             )}
-            <span> • </span>
-            <span className="text-[#029E6A] font-medium">Open</span>
-            <span> until 2:00 AM</span>
           </p>
         </div>
 

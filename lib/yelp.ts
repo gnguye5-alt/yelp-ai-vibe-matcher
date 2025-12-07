@@ -20,6 +20,17 @@ export interface YelpBusiness {
   phone: string;
   display_phone?: string;
   distance?: number;
+  is_closed?: boolean;
+  hours?: {
+    hours_type: string;
+    open: {
+      day: number;
+      start: string;
+      end: string;
+      is_overnight: boolean;
+    }[];
+    is_open_now?: boolean;
+  }[];
   attributes?: {
     NoiseLevel?: string | null;
     WiFi?: string | null;
@@ -173,50 +184,68 @@ export async function getYelpBusiness(businessId: string): Promise<YelpBusiness>
 }
 
 /**
- * Convert vibe preferences to a natural language query
+ * Build an enhanced query from user's natural language input and vibe preferences
+ * Preserves user's intent while augmenting with vibe keywords
  */
 export function buildVibeQuery(
-  searchTerm: string,
-  location: string,
-  preferences: VibePreferences
+  userQuery: string,
+  preferences: VibePreferences,
+  location?: string
 ): string {
-  const parts: string[] = [];
-
-  // Add search term context
-  if (searchTerm && searchTerm !== location) {
-    parts.push(searchTerm);
-  }
+  const vibeParts: string[] = [];
 
   // Add noise level preference
   if (preferences.noiseLevel < 30) {
-    parts.push('quiet');
+    vibeParts.push('quiet');
   } else if (preferences.noiseLevel > 70) {
-    parts.push('lively');
-    parts.push('vibrant atmosphere');
+    vibeParts.push('lively');
+    vibeParts.push('vibrant atmosphere');
   }
 
   // Add cozy factor preference
   if (preferences.cozyFactor > 70) {
-    parts.push('cozy');
-    parts.push('warm ambiance');
+    vibeParts.push('cozy');
+    vibeParts.push('warm ambiance');
   } else if (preferences.cozyFactor < 30) {
-    parts.push('modern');
-    parts.push('minimalist');
+    vibeParts.push('modern');
+    vibeParts.push('minimalist');
   }
 
   // Add focus/work preference
   if (preferences.focusLevel > 70) {
-    parts.push('good for working');
-    parts.push('has WiFi');
-    parts.push('quiet enough to focus');
+    vibeParts.push('good for working');
+    vibeParts.push('has WiFi');
+    vibeParts.push('quiet enough to focus');
   } else if (preferences.focusLevel < 30) {
-    parts.push('casual hangout spot');
-    parts.push('social atmosphere');
+    vibeParts.push('casual hangout spot');
+    vibeParts.push('social atmosphere');
   }
 
-  // Build the query
-  const vibeDescription = parts.length > 0 ? parts.join(', ') : 'restaurant or cafe';
-  return `Find me ${vibeDescription} places in ${location}`;
+  // Build the query - preserve user's natural language, enhance with vibe keywords
+  let query = '';
+  
+  if (userQuery.trim()) {
+    // User provided a description - use it as primary
+    query = userQuery.trim();
+    
+    // Augment with vibe keywords if they add value
+    if (vibeParts.length > 0) {
+      query += `, ${vibeParts.join(', ')}`;
+    }
+  } else {
+    // No user query - build from vibe preferences
+    query = vibeParts.length > 0 ? vibeParts.join(', ') : 'restaurant or cafe';
+  }
+
+  // Add location context if provided
+  if (location) {
+    query = `Find me ${query} in ${location}`;
+  } else {
+    // No explicit location - let coordinates handle it or use "nearby"
+    query = `Find me ${query} nearby`;
+  }
+
+  return query;
 }
 
 /**

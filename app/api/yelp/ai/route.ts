@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const {
-      searchTerm,
+      query: userQuery = '',
       location,
       noiseLevel = 50,
       cozyFactor = 50,
@@ -16,12 +16,8 @@ export async function POST(request: NextRequest) {
       longitude,
     } = body;
 
-    if (!location && !latitude) {
-      return NextResponse.json(
-        { error: 'Location or coordinates are required' },
-        { status: 400 }
-      );
-    }
+    // Require either coordinates or location text, or allow searches with neither (Yelp AI will handle)
+    // This is flexible to support various use cases
 
     // Build vibe preferences
     const preferences: VibePreferences = {
@@ -30,18 +26,18 @@ export async function POST(request: NextRequest) {
       focusLevel,
     };
 
-    // Build the natural language query
-    const query = buildVibeQuery(
-      searchTerm || '',
-      location || 'current location',
-      preferences
+    // Build the natural language query from user input and vibe preferences
+    const enhancedQuery = buildVibeQuery(
+      userQuery,
+      preferences,
+      location
     );
 
-    console.log('Yelp AI Query:', query);
+    console.log('Yelp AI Query:', enhancedQuery);
 
     // Call Yelp AI API
     const aiResponse = await searchWithYelpAI(
-      query,
+      enhancedQuery,
       chatId,
       latitude && longitude ? { latitude, longitude } : undefined
     );
@@ -55,6 +51,16 @@ export async function POST(request: NextRequest) {
           businesses.push(...entity.businesses);
         }
       }
+    }
+
+    // Log sample business data to understand structure
+    if (businesses.length > 0) {
+      console.log('Sample business data:', {
+        name: businesses[0].name,
+        is_closed: businesses[0].is_closed,
+        hours: businesses[0].hours,
+        allKeys: Object.keys(businesses[0])
+      });
     }
 
     // Calculate vibe scores and match percentage for each business
@@ -86,7 +92,7 @@ export async function POST(request: NextRequest) {
         text: aiResponse.response.text,
         chatId: aiResponse.chat_id,
       },
-      query,
+      query: enhancedQuery,
     });
   } catch (error) {
     console.error('Yelp AI API error:', error);
