@@ -258,31 +258,21 @@ The Yelp AI API allows us to use natural language to express nuanced preferences
 - [ ] **Machine Learning**: Improve scoring based on user feedback
 - [ ] **Multi-language Support**: Internationalization
 
-## 🤝 Contributing
-
-This is a hackathon project, but contributions, issues, and feature requests are welcome!
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- **Yelp** for providing the Fusion API and AI API
+- **Yelp** for providing the API and AI API
 - **Next.js** team for the amazing framework
 - **Vercel** for hosting and deployment platform
-- All the coffee shops that inspired this project ☕
+- All the places that inspired this project ☕
 
 ## 📧 Contact
 
-Han Nguyen - [@gnguye5-alt](https://github.com/gnguye5-alt)
-
+Hayley Nguyen - [@gnguye5-alt](https://github.com/gnguye5-alt)
+Tim Huynh - [@khuynh22] ((https://github.com/khuynh22)
 Project Link: [https://github.com/gnguye5-alt/yelp-api-ai-hackathon](https://github.com/gnguye5-alt/yelp-api-ai-hackathon)
 
 ---
