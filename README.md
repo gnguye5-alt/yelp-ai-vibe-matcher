@@ -279,6 +279,6 @@ Project Link: [https://github.com/gnguye5-alt/yelp-api-ai-hackathon](https://git
 
 <div align="center">
 
-**Built with 🧋&☕️ for the Yelp API AI Hackathon**
+**Built with 🧋&💖 for the Yelp API AI Hackathon**
 
 </div>
