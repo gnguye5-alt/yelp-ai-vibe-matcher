@@ -27,7 +27,7 @@ Built for the Yelp API AI Hackathon, this project leverages the **Yelp AI API** 
 
 ## ✨ Features
 
-### 🎚️ Interactive Vibe Sliders
+### ☕️ Interactive Vibe Sliders
 - **Intuitive Controls**: Adjust three vibe parameters to express exactly what atmosphere you're seeking
 - **Real-time Feedback**: See how your preferences translate into search criteria
 - **Visual Icons**: Clear representation of each vibe dimension
@@ -73,7 +73,6 @@ Built for the Yelp API AI Hackathon, this project leverages the **Yelp AI API** 
 ## 🚀 Getting Started
 
 ### Prerequisites
-
 - Node.js 20+
 - npm, yarn, pnpm, or bun
 - Yelp API Key ([Get one here](https://www.yelp.com/developers/v3/manage_app))
@@ -281,9 +280,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📧 Contact
 
-Hayley Nguyen - [@gnguye5-alt](https://github.com/gnguye5-alt)
-Tim Huynh - [@khuynh22] ((https://github.com/khuynh22)
-Project Link: [https://github.com/gnguye5-alt/yelp-api-ai-hackathon](https://github.com/gnguye5-alt/yelp-api-ai-hackathon)
+- Hayley Nguyen - [@gnguye5-alt](https://github.com/gnguye5-alt)
+- Tim Huynh - [@khuynh22] ((https://github.com/khuynh22)
+- Project Link: [https://github.com/gnguye5-alt/yelp-api-ai-hackathon](https://github.com/gnguye5-alt/yelp-api-ai-hackathon)
 
 ---
 
