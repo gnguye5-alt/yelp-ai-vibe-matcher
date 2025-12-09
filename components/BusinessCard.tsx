@@ -71,7 +71,7 @@ function getMatchBgColor(percentage: number): string {
   return 'bg-[#FFECEC] border-[#D71616]/30'; // Red Light
 }
 
-export default function BusinessCard({ business, vibeScores, vibeMatch, quote }: BusinessCardProps) {
+export default function BusinessCard({ business, vibeMatch, quote }: BusinessCardProps) {
   // Generate star rating
   const fullStars = Math.floor(business.rating);
   const hasHalfStar = business.rating % 1 >= 0.5;
