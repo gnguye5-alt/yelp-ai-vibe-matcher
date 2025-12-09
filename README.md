@@ -138,13 +138,6 @@ Each business displays:
   - ☕ Cozy factor (0-100)
   - 🎯 Focus level (0-100)
 
-### Example Use Cases
-
-- **Study Session**: High focus (80), low noise (20), medium cozy (50)
-- **Date Night**: High cozy (90), medium noise (50), low focus (20)
-- **Work Meeting**: Medium focus (60), low noise (30), low cozy (30)
-- **Social Hangout**: Low focus (20), high noise (80), high cozy (70)
-
 ## 🔧 API Routes
 
 ### `/api/yelp/search` (GET)
@@ -239,24 +232,41 @@ yelp-ai-vibe-matcher/
 ### Why Vibe-Based Search?
 Traditional search focuses on *what* you're looking for. Vibe-based search focuses on *how* you want to feel. This creates a more intuitive and emotionally-aware discovery experience.
 
-### Three Vibe Dimensions
-After research, we identified three key atmospheric factors that users care about most when choosing a place:
-1. **Noise** - Energy level and volume
-2. **Cozy** - Comfort and warmth
-3. **Focus** - Suitability for concentration
+### Why Yelp AI API?
+The Yelp AI API's natural language understanding allows us to:
+- **Extract sensory context** from thousands of reviews ("too loud," "peaceful," "overstimulating")
+- **Understand nuanced preferences** beyond simple filters
+- **Provide explanations** for why a venue matches or doesn't match
 
-### AI Integration
-The Yelp AI API allows us to use natural language to express nuanced preferences that would be difficult to capture with traditional filters.
+This would be impossible with traditional keyword-based search.
 
-## 🚧 Future Enhancements
+## 🌍 Impact & Scalability
 
-- [ ] **User Profiles**: Save favorite vibe presets
-- [ ] **Time-Aware Matching**: Consider how vibes change throughout the day
-- [ ] **Social Features**: Share vibe-matched spots with friends
-- [ ] **Advanced Filters**: Additional filters for dietary restrictions, accessibility, etc.
-- [ ] **Vibe Heatmap**: Visualize vibe scores across a neighborhood
-- [ ] **Machine Learning**: Improve scoring based on user feedback
-- [ ] **Multi-language Support**: Internationalization
+### **Immediate Impact: Accessibility**
+**Primary Users:** Students, remote workers, parents, introverts, anyone who values atmosphere
+
+**Benefits:**
+- ✅ Increase confidence in social participation
+- ✅ Save time and energy avoiding overwhelming spaces
+- ✅ Enable participation in activities previously avoided
+- ✅ Foster independence and autonomy
+
+**Market Opportunity:** This addresses a gap in Yelp's current offering—**emotional/atmospheric search**—which complements their category-based and rating-based search.
+
+### **Business Alignment with Yelp**
+- 📈 **Increased Engagement**: Users search more specifically, leading to more sessions
+- 🎯 **Better Matches**: Higher satisfaction = more conversions and repeat usage
+- 💡 **Differentiation**: No competitor offers sensory-based local search
+- 🌐 **Inclusive Brand**: Positions Yelp as leader in accessible technology
+- 📊 **Data Insights**: Aggregated sensory data reveals new business trends
+
+### **How We Use Yelp AI API:**
+1. **Natural Language Query Generation**: Convert sensory slider preferences into contextual queries
+2. **AI-Powered Business Discovery**: Leverage Yelp AI's understanding of review context
+3. **Sensory Data Extraction**: Analyze business attributes, reviews, and categories for sensory scoring
+4. **Match Ranking**: Score and rank businesses based on sensory profile alignment
+
+**No other APIs are used for business or location data. Yelp AI API is the sole data source.**
 
 ## 📄 License
 
@@ -279,6 +289,5 @@ Project Link: [https://github.com/gnguye5-alt/yelp-api-ai-hackathon](https://git
 
 <div align="center">
 
-**Built with 🧋&💖 for the Yelp API AI Hackathon**
-
+**Built with 💙 for accessibility and inclusion**
 </div>
