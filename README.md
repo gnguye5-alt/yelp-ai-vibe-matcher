@@ -281,7 +281,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 📧 Contact
 
 - Hayley Nguyen - [@gnguye5-alt](https://github.com/gnguye5-alt)
-- Tim Huynh - [@khuynh22] ((https://github.com/khuynh22)
+- Tim Huynh - [@khuynh22](https://github.com/khuynh22)
 - Project Link: [https://github.com/gnguye5-alt/yelp-api-ai-hackathon](https://github.com/gnguye5-alt/yelp-api-ai-hackathon)
 
 ---
