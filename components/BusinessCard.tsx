@@ -210,7 +210,7 @@ export default function BusinessCard({ business, vibeMatch, quote }: BusinessCar
             </span>
             <div className="flex gap-2 text-xs">
               <span className="flex items-center gap-1">
-                <span className="text-[#898A8B]">quiet</span>
+                <span className="text-[#898A8B]">Quiet</span>
                 <span className={`font-medium ${getMatchTextColor(vibeMatch.breakdown.quiet)}`}>
                   {vibeMatch.breakdown.quiet}%
                 </span>
