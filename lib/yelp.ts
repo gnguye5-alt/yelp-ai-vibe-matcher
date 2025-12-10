@@ -32,7 +32,7 @@ export interface YelpBusiness {
     is_open_now?: boolean;
   }[];
   attributes?: {
-    NoiseLevel?: string | null;
+    quietLevel?: string | null;
     WiFi?: string | null;
     Ambience?: {
       cozy?: boolean | null;
@@ -110,7 +110,7 @@ export interface YelpAIChatResponse {
 }
 
 export interface VibePreferences {
-  noiseLevel: number; // 0-100: 0 = quiet, 100 = lively
+  quietLevel: number; // 0-100: 0 = quiet, 100 = lively
   cozyFactor: number; // 0-100: 0 = minimal, 100 = very cozy
   focusLevel: number; // 0-100: 0 = casual, 100 = work-friendly
 }
@@ -194,10 +194,10 @@ export function buildVibeQuery(
 ): string {
   const vibeParts: string[] = [];
 
-  // Add noise level preference
-  if (preferences.noiseLevel < 30) {
+  // Add quiet level preference
+  if (preferences.quietLevel < 30) {
     vibeParts.push('quiet');
-  } else if (preferences.noiseLevel > 70) {
+  } else if (preferences.quietLevel > 70) {
     vibeParts.push('lively');
     vibeParts.push('vibrant atmosphere');
   }
@@ -223,11 +223,11 @@ export function buildVibeQuery(
 
   // Build the query - preserve user's natural language, enhance with vibe keywords
   let query = '';
-  
+
   if (userQuery.trim()) {
     // User provided a description - use it as primary
     query = userQuery.trim();
-    
+
     // Augment with vibe keywords if they add value
     if (vibeParts.length > 0) {
       query += `, ${vibeParts.join(', ')}`;
@@ -295,9 +295,9 @@ export async function searchWithYelpAI(
  * Keywords and weights for vibe analysis from reviews/summaries
  */
 const VIBE_KEYWORDS = {
-  noise: {
+  quiet: {
     quiet: ['quiet', 'peaceful', 'calm', 'serene', 'tranquil', 'silent', 'relaxed', 'chill', 'mellow', 'soft music'],
-    moderate: ['moderate', 'ambient', 'background music', 'comfortable noise'],
+    moderate: ['moderate', 'ambient', 'background music', 'comfortable quiet'],
     lively: ['lively', 'vibrant', 'bustling', 'energetic', 'loud', 'noisy', 'crowded', 'busy', 'happening', 'upbeat', 'buzzing', 'packed', 'hopping'],
   },
   cozy: {
@@ -356,7 +356,7 @@ function analyzeTextForKeywords(
  */
 export function calculateVibeScores(business: YelpBusiness): {
   cozy: number;
-  noise: number;
+  quiet: number;
   focus: number;
 } {
   // Combine all available text for analysis
@@ -370,7 +370,7 @@ export function calculateVibeScores(business: YelpBusiness): {
   const combinedText = textSources.join(' ').toLowerCase();
 
   // Start with text analysis scores (0-100 scale)
-  let noiseScore = analyzeTextForKeywords(combinedText, VIBE_KEYWORDS.noise);
+  let quietScore = analyzeTextForKeywords(combinedText, VIBE_KEYWORDS.quiet);
   let cozyScore = analyzeTextForKeywords(combinedText, VIBE_KEYWORDS.cozy);
   let focusScore = analyzeTextForKeywords(combinedText, VIBE_KEYWORDS.focus);
 
@@ -378,18 +378,18 @@ export function calculateVibeScores(business: YelpBusiness): {
   const attributes = business.attributes;
 
   if (attributes) {
-    // Noise level from attributes
-    if (attributes.NoiseLevel) {
-      const noiseMap: Record<string, number> = {
+    // quiet level from attributes
+    if (attributes.quietLevel) {
+      const quietMap: Record<string, number> = {
         quiet: 20,
         average: 50,
         loud: 75,
         very_loud: 95,
       };
-      const attrNoise = noiseMap[attributes.NoiseLevel];
-      if (attrNoise !== undefined) {
+      const attrquiet = quietMap[attributes.quietLevel];
+      if (attrquiet !== undefined) {
         // Blend attribute score with text analysis (attributes are more reliable)
-        noiseScore = (noiseScore * 0.4) + (attrNoise * 0.6);
+        quietScore = (quietScore * 0.4) + (attrquiet * 0.6);
       }
     }
 
@@ -404,7 +404,7 @@ export function calculateVibeScores(business: YelpBusiness): {
       cozyScore = Math.min(100, cozyScore + cozyBoost);
     }
 
-    // Focus from WiFi and noise
+    // Focus from WiFi and quiet
     if (attributes.WiFi === 'free') {
       focusScore = Math.min(100, focusScore + 25);
     } else if (attributes.WiFi === 'paid') {
@@ -412,9 +412,9 @@ export function calculateVibeScores(business: YelpBusiness): {
     }
 
     // Quiet places are better for focus
-    if (attributes.NoiseLevel === 'quiet') {
+    if (attributes.quietLevel === 'quiet') {
       focusScore = Math.min(100, focusScore + 15);
-    } else if (attributes.NoiseLevel === 'loud' || attributes.NoiseLevel === 'very_loud') {
+    } else if (attributes.quietLevel === 'loud' || attributes.quietLevel === 'very_loud') {
       focusScore = Math.max(0, focusScore - 20);
     }
 
@@ -427,7 +427,7 @@ export function calculateVibeScores(business: YelpBusiness): {
   // Round to integers
   return {
     cozy: Math.round(cozyScore),
-    noise: Math.round(noiseScore),
+    quiet: Math.round(quietScore),
     focus: Math.round(focusScore),
   };
 }
@@ -437,12 +437,12 @@ export function calculateVibeScores(business: YelpBusiness): {
  * Returns a percentage (0-100) indicating match quality
  */
 export function calculateVibeMatch(
-  businessVibes: { cozy: number; noise: number; focus: number },
+  businessVibes: { cozy: number; quiet: number; focus: number },
   userPreferences: VibePreferences
 ): {
   overall: number;
   breakdown: {
-    noise: number;
+    quiet: number;
     cozy: number;
     focus: number;
   };
@@ -450,17 +450,17 @@ export function calculateVibeMatch(
   // Calculate individual match percentages (100 = perfect match)
   // The closer the business vibe is to user preference, the higher the match
 
-  const noiseMatch = 100 - Math.abs(userPreferences.noiseLevel - businessVibes.noise);
+  const quietMatch = 100 - Math.abs(userPreferences.quietLevel - businessVibes.quiet);
   const cozyMatch = 100 - Math.abs(userPreferences.cozyFactor - businessVibes.cozy);
   const focusMatch = 100 - Math.abs(userPreferences.focusLevel - businessVibes.focus);
 
   // Calculate weighted overall match (equal weights for now)
-  const overall = Math.round((noiseMatch + cozyMatch + focusMatch) / 3);
+  const overall = Math.round((quietMatch + cozyMatch + focusMatch) / 3);
 
   return {
     overall,
     breakdown: {
-      noise: Math.round(noiseMatch),
+      quiet: Math.round(quietMatch),
       cozy: Math.round(cozyMatch),
       focus: Math.round(focusMatch),
     },

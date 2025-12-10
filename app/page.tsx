@@ -35,13 +35,13 @@ interface Business {
   }[];
   vibeScores?: {
     cozy: number;
-    noise: number;
+    quiet: number;
     focus: number;
   };
   vibeMatch?: {
     overall: number;
     breakdown: {
-      noise: number;
+      quiet: number;
       cozy: number;
       focus: number;
     };
@@ -77,7 +77,7 @@ export default function Home() {
   const [locationError, setLocationError] = useState<string | null>(null);
 
   // Vibe slider states
-  const [noiseLevel, setNoiseLevel] = useState(50);
+  const [quietLevel, setquietLevel] = useState(50);
   const [cozyFactor, setCozyFactor] = useState(50);
   const [focusLevel, setFocusLevel] = useState(50);
 
@@ -124,7 +124,7 @@ export default function Home() {
           location: locationInput || undefined,
           latitude: userLocation?.latitude,
           longitude: userLocation?.longitude,
-          noiseLevel,
+          quietLevel,
           cozyFactor,
           focusLevel,
           chatId,
@@ -159,7 +159,7 @@ export default function Home() {
     // Fallback to slider-based calculation if no vibe scores available
     return {
       cozy: Math.floor((cozyFactor / 100) * 5),
-      noise: Math.floor((noiseLevel / 100) * 5),
+      quiet: Math.floor((quietLevel / 100) * 5),
       focus: Math.floor((focusLevel / 100) * 5),
     };
   };
@@ -262,12 +262,12 @@ export default function Home() {
             {/* Vibe Sliders */}
             <div className="py-4 space-y-9 max-w-full">
               <VibeSlider
-                label="Noise"
+                label="Quiet"
                 icon={<FaRegHeadphones />}
                 minLabel="Quiet"
                 maxLabel="Lively"
-                value={noiseLevel}
-                onChange={setNoiseLevel}
+                value={quietLevel}
+                onChange={setquietLevel}
               />
 
               <VibeSlider

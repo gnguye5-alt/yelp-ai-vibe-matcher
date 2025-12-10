@@ -8,7 +8,7 @@ export async function POST(request: NextRequest) {
     const {
       query: userQuery = '',
       location,
-      noiseLevel = 50,
+      quietLevel = 50,
       cozyFactor = 50,
       focusLevel = 50,
       chatId,
@@ -21,7 +21,7 @@ export async function POST(request: NextRequest) {
 
     // Build vibe preferences
     const preferences: VibePreferences = {
-      noiseLevel,
+      quietLevel,
       cozyFactor,
       focusLevel,
     };

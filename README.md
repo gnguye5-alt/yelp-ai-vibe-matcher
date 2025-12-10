@@ -21,7 +21,7 @@
 
 Built for the Yelp API AI Hackathon, this project leverages the **Yelp AI API** to provide intelligent, context-aware recommendations that match user preferences across three key vibe dimensions:
 
-- 🔇 **Noise Level**: From library-quiet to buzzing energy
+- 🔇 **Quiet Level**: From library-quiet to buzzing energy
 - ☕ **Cozy Factor**: From minimal to ultra-cozy atmosphere
 - 🎯 **Focus Level**: From social/casual to highly focused environments
 
@@ -48,7 +48,7 @@ Built for the Yelp API AI Hackathon, this project leverages the **Yelp AI API** 
   - Business categories and attributes
   - Operational characteristics (hours, pricing, etc.)
 - **Match Percentage**: Each result shows how well it matches your vibe preferences
-- **Breakdown Display**: See individual scores for noise, cozy, and focus factors
+- **Breakdown Display**: See individual scores for quiet, cozy, and focus factors
 
 ### 💡 Smart Business Cards
 - **Rich Information**: Display photos, ratings, reviews, pricing, and location
@@ -133,7 +133,7 @@ Built for the Yelp API AI Hackathon, this project leverages the **Yelp AI API** 
 Each business displays:
 - **Overall Match**: Percentage showing how well it matches your preferences
 - **Individual Scores**:
-  - 🔇 Noise level (0-100)
+  - 🔇 Quiet level (0-100)
   - ☕ Cozy factor (0-100)
   - 🎯 Focus level (0-100)
 
@@ -161,7 +161,7 @@ AI-powered vibe-based search
   "location": "San Francisco, CA",
   "latitude": 37.7749,
   "longitude": -122.4194,
-  "noiseLevel": 30,
+  "QuietLevel": 30,
   "cozyFactor": 70,
   "focusLevel": 80,
   "chatId": "optional-for-conversation-continuity"
@@ -185,8 +185,8 @@ AI-powered vibe-based search
 
 The vibe matching algorithm analyzes multiple factors:
 
-### Noise Level Calculation
-- Business categories (bars, nightclubs = high noise)
+### Quiet Level Calculation
+- Business categories (bars, nightclubs = high Quiet)
 - Review content analysis for keywords like "quiet", "loud", "peaceful"
 - Time of day and operational hours
 
@@ -198,7 +198,7 @@ The vibe matching algorithm analyzes multiple factors:
 ### Focus Level Calculation
 - Categories (libraries, co-working spaces = high focus)
 - Review mentions of "work-friendly", "wifi", "quiet"
-- Inverse correlation with noise level
+- Inverse correlation with Quiet level
 
 ### Overall Match Score
 Weighted average of how closely each business's vibe profile matches user preferences, normalized to 0-100%.

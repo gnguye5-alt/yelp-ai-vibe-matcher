@@ -32,13 +32,13 @@ interface BusinessCardProps {
   };
   vibeScores?: {
     cozy: number; // 0-100
-    noise: number; // 0-100
+    quiet: number; // 0-100
     focus: number; // 0-100
   };
   vibeMatch?: {
     overall: number;
     breakdown: {
-      noise: number;
+      quiet: number;
       cozy: number;
       focus: number;
     };
@@ -210,9 +210,9 @@ export default function BusinessCard({ business, vibeMatch, quote }: BusinessCar
             </span>
             <div className="flex gap-2 text-xs">
               <span className="flex items-center gap-1">
-                <span className="text-[#898A8B]">Noise</span>
-                <span className={`font-medium ${getMatchTextColor(vibeMatch.breakdown.noise)}`}>
-                  {vibeMatch.breakdown.noise}%
+                <span className="text-[#898A8B]">quiet</span>
+                <span className={`font-medium ${getMatchTextColor(vibeMatch.breakdown.quiet)}`}>
+                  {vibeMatch.breakdown.quiet}%
                 </span>
               </span>
               <span className="text-[#C8C9CA]">|</span>
